@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body>
+    <div id="maincontainer"></div>
+    <script>
+        let container = document.getElementById("maincontainer");
+
+        let header = document.createElement("h1");
+        header.textContent = "Exercise 04: JavaScript&DOM";
+        container.appendChild(header);
+
+        let color = ["orange", "tomato", "mediumseagreen", "slateblue", "violet", "dodgerblue"]       
+    
+        let btn = document.createElement("button");
+        let btn_text = document.createTextNode("Click me to display Date and Time");
+        btn.style.position = "absolute";
+        btn.style.width = "fix-content"
+        btn.appendChild(btn_text);
+        container.appendChild(btn);
+
+        worker = new Worker("./work.js");
+
+        let state = 0;
+        btn.onclick = () => { 
+            state = !state; 
+            worker.postMessage(state);
+            if (state == 1) {
+                btn.style.position = "fixed";
+                btn.style.top = 0;
+                btn.style.right = 0;
+            }
+            else {
+                btn.style.position = "absolute";
+                btn.style.top = '';
+                btn.style.right = '';
+            }
+
+        }
+        worker.onmessage = ({ data }) => {
+            btn.innerText = data[0] 
+            btn.style.background = color[data[1]];  
+        }
+
+        //personal
+        let personal_container = document.createElement("div");
+        personal_container.classList.add('personal-Container')
+        container.appendChild(personal_container);
+
+        let personal_link_bt = document.createElement("a");
+        personal_link_bt.innerHTML = "Personal info"
+        personal_link_bt.style.color = "violet"
+        personal_link_bt.href = '#'
+
+        personal_container.appendChild(personal_link_bt);
+        personal_container.style.marginTop = '7vh'
+
+        personal_link_bt.onmouseover = () => {
+            personal_link_bt.style.background = "yellow";
+            personal_link_bt.style.color = 'blue';
+
+        };
+        personal_link_bt.onmouseout = () => {
+            personal_link_bt.style.background = "transparent";
+            personal_link_bt.style.color = "violet";
+        };
+
+        let info = document.createElement("div");
+        info.appendChild(personal_link_bt);
+        info.style.marginBlock = "20px";
+        container.appendChild(info);
+
+        let infoUL = document.createElement("ul");
+        infoUL.hidden = true;
+
+        personal_link_bt.onclick = () => {
+            infoUL.hidden = !infoUL.hidden;
+        };
+
+        const list = ["Name: Pimolnut Sriphadejkullacha, ID: 64010605",
+            "Subject: Web Application Development",
+            "Semetry: 2/2566"];
+
+        list.forEach((e) => {
+            let li = document.createElement("li");
+            infoUL.appendChild(li);
+            li.innerHTML += e;
+        });
+        container.appendChild(infoUL)
+
+
+        let snapshots_header = document.createElement("h2");
+        snapshots_header.innerHTML = "Snapshots";
+        container.appendChild(snapshots_header);
+
+        const data = [
+            { name: "Fireworks", scr: "https://images.pexels.com/photos/2526105/pexels-photo-2526105.jpeg?cs=srgb&dl=pexels-designecologist-2526105.jpg&fm=jpg" },
+            { name: "Crest", scr: "https://1000logos.net/wp-content/uploads/2021/11/Gryffindor-Logo.jpg" },
+            { name: "Action", scr: "https://yanivshoval.files.wordpress.com/2015/05/action-istock_000018662891small.jpg" },
+            { name: "Buffalo", scr: "https://cdn.pixabay.com/photo/2019/06/29/04/02/buffalo-4305380_960_720.jpg" },
+        ];
+
+        let footerpic = document.createElement("img");
+        footerpic.src = "https://e-file.huawei.com/-/media/EBG/Images/case-study/cases_study_banner/How%20Did%20Huawei%20Build%20the%20100G%20SDN%20Campus%20Network%20for%20KMITL%20of%20Thailand-revised-banner-mobile.jpg";
+        footerpic.style.width = "50%"
+
+        let snapul = document.createElement("ul");
+        data.forEach((arr) => {
+            let snapshots_li = document.createElement("li");
+            snapul.appendChild(snapshots_li);
+
+            let snapshot_btn = document.createElement("a");
+            snapshot_btn.innerHTML = arr.name;
+            snapshot_btn.href = "#";
+            snapshot_btn.onclick = () => {
+                footerpic.src = arr.scr;
+            };
+            snapshots_li.appendChild(snapshot_btn);
+        });
+        container.appendChild(snapul);
+        container.appendChild(footerpic);
+
+    </script>
+</body>
+
+</html>
