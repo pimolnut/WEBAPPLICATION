@@ -12,7 +12,9 @@
         header.textContent = "Exercise 04: JavaScript&DOM";
         container.appendChild(header);
 
-        let color = ["orange", "tomato", "mediumseagreen", "slateblue", "violet", "dodgerblue"]       
+        const color = ["orange", "tomato", "mediumseagreen", "slateblue", "violet", "dodgerblue"]  
+        
+        const color1 = ["dodgerblue" ,"orange", "tomato", "mediumseagreen", "slateblue", "violet"]     
     
         let btn = document.createElement("button");
         let btn_text = document.createTextNode("Click me to display Date and Time");
@@ -21,27 +23,29 @@
         btn.appendChild(btn_text);
         container.appendChild(btn);
 
-        worker = new Worker("./work.js");
 
-        let state = 0;
+        let worker;
+        let state = false;
         btn.onclick = () => { 
             state = !state; 
-            worker.postMessage(state);
-            if (state == 1) {
+            if (state) {
+                worker = new Worker("./work.js");
                 btn.style.position = "fixed";
                 btn.style.top = 0;
                 btn.style.right = 0;
+
+                worker.onmessage = ({data}) => {
+                    btn.innerHTML = data[0];
+                    btn.style.background = color[data[1]];
+                    btn.style.color = color1[data[1]]
+                }
             }
             else {
+                worker.terminate();
                 btn.style.position = "absolute";
                 btn.style.top = '';
                 btn.style.right = '';
             }
-
-        }
-        worker.onmessage = ({ data }) => {
-            btn.innerText = data[0] 
-            btn.style.background = color[data[1]];  
         }
 
         //personal
